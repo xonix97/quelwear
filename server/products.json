@@ -1,0 +1,8 @@
+[
+  { "id": "aurum",   "name": "Aurum",   "price": 480, "desc": "Champagne dial, gold indices. The flagship dress watch." },
+  { "id": "noir",    "name": "Noir",    "price": 420, "desc": "Matte black on black. Quiet, absolute confidence." },
+  { "id": "argent",  "name": "Argent",  "price": 390, "desc": "Silver sunburst dial with a steel mesh strap." },
+  { "id": "royale",  "name": "Royale",  "price": 540, "desc": "Deep navy dial, rose-gold case. Evening essential." },
+  { "id": "ivory",   "name": "Ivory",   "price": 360, "desc": "Warm cream dial, brown leather. Understated warmth." },
+  { "id": "emerald", "name": "Emerald", "price": 610, "desc": "British racing green, gold accents. A collector's piece." }
+]
