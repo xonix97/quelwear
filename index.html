@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quelwear — Formal Watches</title>
+<meta name="description" content="Quelwear — refined formal watches. Timeless design, crafted to last." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#0e0e0f; --bg2:#16161a; --ink:#f4f1ea; --muted:#9a958c;
+    --gold:#c9a96a; --gold-2:#e7cd97; --line:rgba(255,255,255,.08);
+    --serif:"Cormorant Garamond",serif; --sans:"Inter",system-ui,sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:var(--sans); background:var(--bg); color:var(--ink); }
+  a { color:inherit; text-decoration:none; }
+  .wrap { max-width:1160px; margin:0 auto; padding:0 24px; }
+
+  header { position:sticky; top:0; z-index:40; background:rgba(14,14,15,.82); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+  .bar { display:flex; align-items:center; justify-content:space-between; padding:18px 0; }
+  .logo { font-family:var(--serif); font-size:28px; font-weight:700; letter-spacing:2px; }
+  .logo b { color:var(--gold); }
+  nav a { color:var(--muted); margin:0 16px; font-size:14px; letter-spacing:.5px; transition:color .2s; }
+  nav a:hover { color:var(--ink); }
+  .cart-btn { background:none; border:1px solid var(--line); color:var(--ink); padding:9px 16px; border-radius:999px; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:8px; transition:border-color .2s; }
+  .cart-btn:hover { border-color:var(--gold); }
+  .cart-count { background:var(--gold); color:#000; border-radius:999px; min-width:20px; height:20px; display:grid; place-items:center; font-size:12px; font-weight:600; }
+
+  .hero { padding:90px 0 70px; text-align:center; position:relative; overflow:hidden; }
+  .hero .eyebrow { color:var(--gold); letter-spacing:4px; font-size:13px; text-transform:uppercase; margin-bottom:18px; }
+  .hero h1 { font-family:var(--serif); font-size:clamp(44px,7vw,82px); line-height:1.02; font-weight:600; }
+  .hero p { color:var(--muted); max-width:520px; margin:22px auto 32px; font-size:17px; line-height:1.7; font-weight:300; }
+  .btn { background:linear-gradient(135deg,var(--gold),var(--gold-2)); color:#1a1408; border:none; padding:14px 32px; border-radius:4px; font-weight:600; font-size:14px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:transform .2s, box-shadow .2s; }
+  .btn:hover { transform:translateY(-2px); box-shadow:0 14px 36px rgba(201,169,106,.3); }
+
+  .section-head { text-align:center; margin:30px 0 44px; }
+  .section-head .eyebrow { color:var(--gold); letter-spacing:4px; font-size:12px; text-transform:uppercase; }
+  .section-head h2 { font-family:var(--serif); font-size:42px; font-weight:600; margin-top:8px; }
+
+  .products { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:26px; padding-bottom:70px; }
+  .product { background:var(--bg2); border:1px solid var(--line); border-radius:10px; overflow:hidden; transition:transform .25s, border-color .25s; }
+  .product:hover { transform:translateY(-6px); border-color:rgba(201,169,106,.5); }
+  .pic { aspect-ratio:1; display:grid; place-items:center; background:radial-gradient(circle at 50% 40%, #232228, #141318); }
+  .pic svg { width:62%; height:62%; }
+  .pinfo { padding:20px; }
+  .pname { font-family:var(--serif); font-size:22px; }
+  .pdesc { color:var(--muted); font-size:13px; margin:6px 0 14px; line-height:1.5; min-height:38px; }
+  .prow { display:flex; align-items:center; justify-content:space-between; }
+  .price { font-size:18px; font-weight:600; color:var(--gold); }
+  .add { background:none; border:1px solid var(--line); color:var(--ink); padding:8px 16px; border-radius:4px; cursor:pointer; font-size:13px; letter-spacing:.5px; transition:all .2s; }
+  .add:hover { background:var(--gold); color:#000; border-color:var(--gold); }
+
+  /* cart drawer */
+  .overlay { position:fixed; inset:0; background:rgba(0,0,0,.6); opacity:0; pointer-events:none; transition:opacity .3s; z-index:50; }
+  .overlay.open { opacity:1; pointer-events:auto; }
+  .drawer { position:fixed; top:0; right:0; height:100%; width:380px; max-width:90vw; background:var(--bg2); border-left:1px solid var(--line); transform:translateX(100%); transition:transform .3s; z-index:60; display:flex; flex-direction:column; }
+  .drawer.open { transform:translateX(0); }
+  .drawer h3 { font-family:var(--serif); font-size:26px; padding:24px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
+  .drawer h3 button { background:none; border:none; color:var(--muted); font-size:24px; cursor:pointer; }
+  .items { flex:1; overflow-y:auto; padding:12px 24px; }
+  .citem { display:flex; gap:12px; align-items:center; padding:14px 0; border-bottom:1px solid var(--line); }
+  .citem .ci-pic { width:50px; height:50px; border-radius:6px; background:#232228; display:grid; place-items:center; flex-shrink:0; }
+  .citem .ci-pic svg { width:34px; height:34px; }
+  .ci-name { font-size:14px; font-weight:500; }
+  .ci-price { color:var(--gold); font-size:13px; }
+  .qty { display:flex; align-items:center; gap:8px; margin-top:4px; }
+  .qty button { width:22px; height:22px; border:1px solid var(--line); background:none; color:var(--ink); border-radius:4px; cursor:pointer; }
+  .ci-rm { margin-left:auto; background:none; border:none; color:var(--muted); cursor:pointer; font-size:12px; }
+  .empty { color:var(--muted); text-align:center; padding:40px 0; font-size:14px; }
+  .summary { padding:20px 24px; border-top:1px solid var(--line); }
+  .summary .total { display:flex; justify-content:space-between; font-size:18px; margin-bottom:16px; }
+  .summary .total b { color:var(--gold); }
+  .summary .btn { width:100%; }
+
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--gold); color:#000; padding:12px 22px; border-radius:6px; font-size:14px; font-weight:500; opacity:0; pointer-events:none; transition:all .3s; z-index:70; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  footer { border-top:1px solid var(--line); padding:50px 0; text-align:center; color:var(--muted); font-size:13px; }
+  footer .logo { font-size:22px; margin-bottom:14px; }
+  footer .links a { margin:0 12px; color:var(--muted); }
+  .copyright { margin-top:20px; font-size:12px; opacity:.7; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <div class="logo">QUEL<b>WEAR</b></div>
+    <nav>
+      <a href="#collection">Collection</a>
+      <a href="#about">Heritage</a>
+    </nav>
+    <button class="cart-btn" onclick="toggleCart(true)">Cart <span class="cart-count" id="count">0</span></button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Est. MMXXVI</div>
+    <h1>Time, refined.</h1>
+    <p>Formal watches built around restraint, balance, and the kind of detail you only notice up close. Crafted to outlast trends.</p>
+    <button class="btn" onclick="document.getElementById('collection').scrollIntoView()">Explore the Collection</button>
+  </div>
+</div>
+
+<div class="wrap" id="collection">
+  <div class="section-head">
+    <div class="eyebrow">The Collection</div>
+    <h2>Signature Timepieces</h2>
+  </div>
+  <div class="products" id="products"></div>
+</div>
+
+<footer id="about">
+  <div class="logo">QUEL<b>WEAR</b></div>
+  <p>Formal watches, crafted to last.</p>
+  <div class="links" style="margin-top:14px">
+    <a href="#collection">Collection</a><a href="#">Heritage</a><a href="#">Contact</a>
+  </div>
+  <div class="copyright">© 2026 Quelwear. All rights reserved. Designed &amp; built by <a href="https://xonix-am14.netlify.app" style="color:var(--gold)">xonix</a>.</div>
+</footer>
+
+<!-- cart -->
+<div class="overlay" id="overlay" onclick="toggleCart(false)"></div>
+<aside class="drawer" id="drawer">
+  <h3>Your Cart <button onclick="toggleCart(false)">×</button></h3>
+  <div class="items" id="items"></div>
+  <div class="summary">
+    <div class="total">Total <b id="total">$0</b></div>
+    <button class="btn" onclick="checkout()">Checkout</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // Watch SVG generator — varies dial + accent color per model
+  const watch = (dial, accent, strap) => `
+    <svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+      <rect x="48" y="6" width="24" height="34" rx="6" fill="${strap}"/>
+      <rect x="48" y="120" width="24" height="34" rx="6" fill="${strap}"/>
+      <circle cx="60" cy="80" r="42" fill="#0c0b0e" stroke="${accent}" stroke-width="3"/>
+      <circle cx="60" cy="80" r="36" fill="${dial}"/>
+      <circle cx="60" cy="80" r="2.5" fill="${accent}"/>
+      <line x1="60" y1="80" x2="60" y2="54" stroke="${accent}" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="60" y1="80" x2="78" y2="88" stroke="${accent}" stroke-width="2" stroke-linecap="round"/>
+      <g stroke="${accent}" stroke-width="1.5" opacity="0.8">
+        <line x1="60" y1="48" x2="60" y2="52"/><line x1="60" y1="108" x2="60" y2="112"/>
+        <line x1="28" y1="80" x2="32" y2="80"/><line x1="88" y1="80" x2="92" y2="80"/>
+      </g>
+    </svg>`;
+
+  const PRODUCTS = [
+    { id:"aurum",   name:"Aurum",   desc:"Champagne dial, gold indices. The flagship dress watch.", price:480, svg:watch("#1c1a16","#c9a96a","#2a2620") },
+    { id:"noir",    name:"Noir",    desc:"Matte black on black. Quiet, absolute confidence.",       price:420, svg:watch("#0d0d0f","#8a8f99","#161616") },
+    { id:"argent",  name:"Argent",  desc:"Silver sunburst dial with a steel mesh strap.",            price:390, svg:watch("#d9d9de","#5a5f6b","#3a3d44") },
+    { id:"royale",  name:"Royale",  desc:"Deep navy dial, rose-gold case. Evening essential.",       price:540, svg:watch("#12182b","#c98f6a","#1a2236") },
+    { id:"ivory",   name:"Ivory",   desc:"Warm cream dial, brown leather. Understated warmth.",      price:360, svg:watch("#efe9dd","#9a7b4f","#4a3526") },
+    { id:"emerald", name:"Emerald", desc:"British racing green, gold accents. A collector's piece.", price:610, svg:watch("#0f2a22","#c9a96a","#16241f") },
+  ];
+
+  let cart = JSON.parse(localStorage.getItem("quelwear_cart") || "{}");
+  const fmt = (n) => "$" + n.toLocaleString();
+
+  function renderProducts() {
+    document.getElementById("products").innerHTML = PRODUCTS.map(p => `
+      <div class="product">
+        <div class="pic">${p.svg}</div>
+        <div class="pinfo">
+          <div class="pname">${p.name}</div>
+          <div class="pdesc">${p.desc}</div>
+          <div class="prow"><span class="price">${fmt(p.price)}</span>
+            <button class="add" onclick="add('${p.id}')">Add to Cart</button></div>
+        </div>
+      </div>`).join("");
+  }
+
+  function add(id) { cart[id] = (cart[id]||0) + 1; save(); renderCart(); toast(`${PRODUCTS.find(p=>p.id===id).name} added`); }
+  function setQty(id, d) { cart[id] = (cart[id]||0) + d; if (cart[id] <= 0) delete cart[id]; save(); renderCart(); }
+  function save() { localStorage.setItem("quelwear_cart", JSON.stringify(cart)); document.getElementById("count").textContent = Object.values(cart).reduce((a,b)=>a+b,0); }
+
+  function renderCart() {
+    const ids = Object.keys(cart);
+    const box = document.getElementById("items");
+    if (!ids.length) { box.innerHTML = '<div class="empty">Your cart is empty.</div>'; document.getElementById("total").textContent = "$0"; return; }
+    let total = 0;
+    box.innerHTML = ids.map(id => {
+      const p = PRODUCTS.find(x => x.id === id); const q = cart[id]; total += p.price * q;
+      return `<div class="citem">
+        <div class="ci-pic">${p.svg}</div>
+        <div>
+          <div class="ci-name">${p.name}</div>
+          <div class="ci-price">${fmt(p.price)}</div>
+          <div class="qty"><button onclick="setQty('${id}',-1)">−</button><span>${q}</span><button onclick="setQty('${id}',1)">+</button></div>
+        </div>
+        <button class="ci-rm" onclick="setQty('${id}',-${q})">Remove</button>
+      </div>`;
+    }).join("");
+    document.getElementById("total").textContent = fmt(total);
+  }
+
+  function toggleCart(open) {
+    document.getElementById("drawer").classList.toggle("open", open);
+    document.getElementById("overlay").classList.toggle("open", open);
+  }
+  function checkout() {
+    if (!Object.keys(cart).length) return toast("Your cart is empty");
+    toast("Checkout is a demo — wire to the backend / Stripe to go live");
+  }
+  let toastTimer;
+  function toast(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("show"), 2200); }
+
+  renderProducts(); save(); renderCart();
+</script>
+</body>
+</html>
